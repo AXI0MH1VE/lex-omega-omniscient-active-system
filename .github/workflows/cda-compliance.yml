@@ -1,0 +1,26 @@
+name: CDA-v1.0 Compliance Validation
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check Constitution
+        run: |
+          if [ ! -f .github/CONSTITUTION.md ]; then exit 1; fi
+          echo "✅ Constitution present"
+      - name: Check Compliance
+        run: |
+          if [ ! -f .github/COMPLIANCE.md ]; then exit 1; fi
+          echo "✅ Compliance docs present"
+      - name: Validate README
+        run: |
+          if ! grep -q "Constitution of a Deterministic Assistant" README.md; then exit 1; fi
+          echo "✅ README contains CDA disclosure"
